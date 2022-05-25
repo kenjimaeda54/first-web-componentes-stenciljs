@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0" />
+    <title>Stencil Component Starter</title>
+    <style>
+      body {
+        margin: 0px;
+        padding: 0px;
+        outline: none;
+      }
+      .side-navigation ul {
+        list-style: none;
+      }
+      .side-navigation a {
+        text-decoration: none;
+        font-size: 1rem;
+        color: black;
+      }
+    </style>
+
+    <script type="module" src="/build/first-web-components-with-stenciljs.esm.js"></script>
+    <script nomodule src="/build/first-web-components-with-stenciljs.js"></script>
+  </head>
+  <body>
+    <button>Click open drawer</button>
+    <kvm-side-drawer titleMenu="Main menu">
+      <!--consigo por causa do slot-->
+      <nav class="side-navigation">
+        <ul>
+          <li>
+            <a href="/">A link</a>
+          </li>
+          <li>
+            <a href="/">Other link</a>
+          </li>
+          <li>
+            <a href="/">Third link</a>
+          </li>
+        </ul>
+      </nav>
+    </kvm-side-drawer>
+    <script>
+      const sideDrawer = document.querySelector('kvm-side-drawer');
+      const buttonOpen = document.querySelector('button');
+      buttonOpen.addEventListener('click', () => {
+        //propriedade que colocamos em @Prop
+        sideDrawer.opened = true;
+      });
+    </script>
+  </body>
+</html>
