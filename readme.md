@@ -1,75 +1,137 @@
-![Built With Stencil](https://img.shields.io/badge/-Built%20With%20Stencil-16161d.svg?logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjIuMSwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPgo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IgoJIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCA1MTIgNTEyOyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI%2BCjxzdHlsZSB0eXBlPSJ0ZXh0L2NzcyI%2BCgkuc3Qwe2ZpbGw6I0ZGRkZGRjt9Cjwvc3R5bGU%2BCjxwYXRoIGNsYXNzPSJzdDAiIGQ9Ik00MjQuNywzNzMuOWMwLDM3LjYtNTUuMSw2OC42LTkyLjcsNjguNkgxODAuNGMtMzcuOSwwLTkyLjctMzAuNy05Mi43LTY4LjZ2LTMuNmgzMzYuOVYzNzMuOXoiLz4KPHBhdGggY2xhc3M9InN0MCIgZD0iTTQyNC43LDI5Mi4xSDE4MC40Yy0zNy42LDAtOTIuNy0zMS05Mi43LTY4LjZ2LTMuNkgzMzJjMzcuNiwwLDkyLjcsMzEsOTIuNyw2OC42VjI5Mi4xeiIvPgo8cGF0aCBjbGFzcz0ic3QwIiBkPSJNNDI0LjcsMTQxLjdIODcuN3YtMy42YzAtMzcuNiw1NC44LTY4LjYsOTIuNy02OC42SDMzMmMzNy45LDAsOTIuNywzMC43LDkyLjcsNjguNlYxNDEuN3oiLz4KPC9zdmc%2BCg%3D%3D&colorA=16161d&style=flat-square)
+# Slide Drawer
+Pequeno slide drawer com stenciljs
 
-# Stencil Component Starter
+## Motivação
+Entender como esta ferramenta pode auxiliar construção de web componentes 
 
-This is a starter project for building a standalone Web Component using Stencil.
 
-Stencil is also great for building entire apps. For that, use the [stencil-app-starter](https://github.com/ionic-team/stencil-app-starter) instead.
-
-# Stencil
-
-Stencil is a compiler for building fast web apps using Web Components.
-
-Stencil combines the best concepts of the most popular frontend frameworks into a compile-time rather than run-time tool.  Stencil takes TypeScript, JSX, a tiny virtual DOM layer, efficient one-way data binding, an asynchronous rendering pipeline (similar to React Fiber), and lazy-loading out of the box, and generates 100% standards-based Web Components that run in any browser supporting the Custom Elements v1 spec.
-
-Stencil components are just Web Components, so they work in any major framework or with no framework at all.
-
-## Getting Started
-
-To start building a new web component using Stencil, clone this repo to a new directory:
-
-```bash
-git clone https://github.com/ionic-team/stencil-component-starter.git my-component
-cd my-component
-git remote rm origin
+## Feature
+- Stencil utiliza conceito decorador do typescript, para representar  props, estados,métodos
+- Stencil esta muito próximo ao React, trabalhamos com props sendo imutáveis são estados mutáveis
+- Props tem mesmo principio do React, passagem de valores entre componentes pais e filhos
+- Decorador @Prop permite usarmos um método mutable, com esse método eu consigo inferir novos valores para prop
+- Decorador @Method permite usarmos um método como publico, ou seja acessado fora da classe
+- Metodo reflect é útil para refletir as mudanças das props em todos lugares. Exemplo: <kvm-side-drawer titlemenu>
+- titlemenu precisam ser minusculo, não permite camel case 
+- Exemplo abaixo consigo acessar o método open, porque tem o decorador @Method
+- Observa no exemplo abaixo que consigo mudar opened, porque esta mutable 
+  
+``` ts
+  
+export class SideDrawer {    
+ @Prop({ reflect: true }) titlemenu: string;
+ @Prop({ reflect: true, mutable: true }) opened: boolean;
+  
+  
+   handleModal() {
+    this.opened = false;
+  }
+  
+  @Method()
+  async open() {
+    this.opened = true;
+  }
+  
+}
 ```
+  
+```html
+  <button>Click open drawer</button>
+    <kvm-side-drawer titleMenu="Main menu">
+      <!--consigo por causa do slot-->
+      <nav class="side-navigation">
+        <ul>
+          <li>
+            <a href="/">A link</a>
+          </li>
+          <li>
+            <a href="/">Other link</a>
+          </li>
+          <li>
+            <a href="/">Third link</a>
+          </li>
+        </ul>
+      </nav>
+    </kvm-side-drawer>
+    <script>
+      const sideDrawer = document.querySelector('kvm-side-drawer');
+      const buttonOpen = document.querySelector('button');
+      buttonOpen.addEventListener('click', () => {
+        sideDrawer.open();
+      });
+    </script>  
+  
+```  
+  
+##
+  
+- Para manipular logica de negócio usamos decorador @State()
+- Principio é idêntico ao react ,diferença que não preciso atualizar o valor com set
+- Stencil também pode apenas um filho se deseja retornar mais que um,precisa ser um array é no primeiro filho colocar,
+- Todos recursos do web componentes estão disponíveis aqui, shadow root,custom tag,slot, host...
+- Usamos decorador chamado @Componente, tag sera o nome da tag em si,styleUrl é o caminho relativo do css e shadow  permitir ser shadow down
+- Também consigo estilizar em line  mudando styleUrl por outra propriedade  
+  
+ ``` ts
 
-and run:
-
-```bash
-npm install
-npm start
-```
-
-To build the component for production, run:
-
-```bash
-npm run build
-```
-
-To run the unit tests for the components, run:
-
-```bash
-npm test
-```
-
-Need help? Check out our docs [here](https://stenciljs.com/docs/my-first-component).
-
-
-## Naming Components
-
-When creating new component tags, we recommend _not_ using `stencil` in the component name (ex: `<stencil-datepicker>`). This is because the generated component has little to nothing to do with Stencil; it's just a web component!
-
-Instead, use a prefix that fits your company or any name for a group of related components. For example, all of the Ionic generated web components use the prefix `ion`.
-
-
-## Using this component
-
-There are three strategies we recommend for using web components built with Stencil.
-
-The first step for all three of these strategies is to [publish to NPM](https://docs.npmjs.com/getting-started/publishing-npm-packages).
-
-### Script tag
-
-- Put a script tag similar to this `<script type='module' src='https://unpkg.com/my-component@0.0.1/dist/my-component.esm.js'></script>` in the head of your index.html
-- Then you can use the element anywhere in your template, JSX, html etc
-
-### Node Modules
-- Run `npm install my-component --save`
-- Put a script tag similar to this `<script type='module' src='node_modules/my-component/dist/my-component.esm.js'></script>` in the head of your index.html
-- Then you can use the element anywhere in your template, JSX, html etc
-
-### In a stencil-starter app
-- Run `npm install my-component --save`
-- Add an import to the npm packages `import my-component;`
-- Then you can use the element anywhere in your template, JSX, html etc
+@Component({
+  tag: 'kvm-side-drawer',
+  styleUrl: './side-drawer.css',
+  shadow: true,
+})
+export  
+export class SideDrawer {  
+  handleContactInfo(type: string) {
+    this.showContactInfo = type === 'navigation';
+  } 
+ 
+  render() {
+    return [
+      <div class="background" onClick={this.handleModal.bind(this)} />,
+      <aside>
+        <header>
+          <h1>{this.titlemenu}</h1>
+          <button onClick={this.handleModal.bind(this)} class="close">
+            x
+          </button>
+        </header>
+        <main>
+          <div class="tab">
+            <button onClick={this.handleContactInfo.bind(this, 'contact')} class={!this.showContactInfo ? 'active' : ''}>
+              Contact
+            </button>
+            <button onClick={this.handleContactInfo.bind(this, 'navigation')} class={this.showContactInfo ? 'active' : ''}>
+              Navigation
+            </button>
+          </div>
+          {!this.showContactInfo ? (
+            <div class="main-contact">
+              <h2>You contact our for:</h2>
+              <ul>
+                <a href="something@something">Email: something@something</a>
+              </ul>
+              <ul>
+                <p>Phone: 343434343</p>
+              </ul>
+            </div>
+          ) : (
+            <slot />
+          )}
+        </main>
+      </aside>,
+    ]; 
+  
+  
+ } 
+  
+  
+  ```
+  
+  
+  
+  
+  
+  
+  
+  
+  
