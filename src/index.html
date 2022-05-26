@@ -45,8 +45,8 @@
       const sideDrawer = document.querySelector('kvm-side-drawer');
       const buttonOpen = document.querySelector('button');
       buttonOpen.addEventListener('click', () => {
-        //propriedade que colocamos em @Prop
-        sideDrawer.opened = true;
+        //consigo acessar open porque tem a propriedade @Method
+        sideDrawer.open();
       });
     </script>
   </body>

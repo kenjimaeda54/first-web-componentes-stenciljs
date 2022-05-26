@@ -7,6 +7,7 @@
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
     interface KvmSideDrawer {
+        "open": () => Promise<void>;
         "opened": boolean;
         "titlemenu": string;
     }
