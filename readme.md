@@ -127,8 +127,11 @@ export class SideDrawer {
   
   ```
   
-  
-  
+## Como iniciar o projeto
+- Clona o repositório
+- Vai para diretório do projeto
+- Instala as dependências com seu gerenciador preferido npm,yarn...
+- Na raiz do packjson npm run start 
   
   
   
